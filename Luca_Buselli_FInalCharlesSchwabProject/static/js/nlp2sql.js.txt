@@ -1,0 +1,239 @@
+$(document).ready(function() {
+    let isSwiped = false;
+    let isDragging = false;
+    let initialX;
+
+    loadPostIts();
+
+    function handleSwiping() {
+        $(document).on('mousemove', function(event) {
+            if (isDragging) {
+                const currentX = event.clientX;
+                const diffX = currentX - initialX;
+
+                if (diffX < -100 && !isSwiped) {
+                    $('#nlp2sql-container').addClass('hidden');
+                    $('#query-container').removeClass('hidden');
+                    isSwiped = true;
+                    isDragging = false;
+                    $(document).off('mousemove');
+                }
+
+                if (diffX > 100 && isSwiped) {
+                    $('#query-container').addClass('hidden');
+                    $('#nlp2sql-container').removeClass('hidden');
+                    isSwiped = false;
+                    isDragging = false;
+                    $(document).off('mousemove');
+                }
+            }
+        }).on('mouseup', function() {
+            isDragging = false;
+            $(document).off('mousemove');
+        });
+    }
+
+    $('#send-button').click(function() {
+        var naturalLanguageQuery = $('#chat-input').val();
+        if (naturalLanguageQuery.trim() !== '') {
+            $('body').addClass('loading');
+            $.ajax({
+                url: '/generate-sql',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ query: naturalLanguageQuery }),
+                success: function(data) {
+                    $('body').removeClass('loading');
+                    if (data.sql) {
+                        createPostIt(data.sql);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('body').removeClass('loading');
+                    console.error("Error generating SQL:", error);
+                }
+            });
+        } else {
+            alert('Please enter a natural language query.');
+        }
+    });
+
+    $('#query-button').click(function() {
+        var sqlQuery = $('#query-input').val();
+        if (sqlQuery.trim() !== '') {
+            $('body').addClass('loading');
+            $.ajax({
+                url: '/run-query',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ query: sqlQuery }),
+                success: function(data) {
+                    $('body').removeClass('loading');
+                    if (data.table) {
+                        $('#result-table').html(data.table);
+                        enableColumnResizing();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('body').removeClass('loading');
+                    console.error("Error running SQL query:", error);
+                }
+            });
+        } else {
+            alert('Please enter an SQL query.');
+        }
+    });
+
+    $('#send-button, #query-button').on('mousedown', function(event) {
+        isDragging = true;
+        initialX = event.clientX;
+        handleSwiping();
+    });
+
+    function createPostIt(content, title = "Double-click to add title", id = Date.now(), position = { top: "50%", left: "50%" }, size = { width: "300px", height: "150px" }, minimized = false) {
+        var containerId = 'sql-output-container-' + id;
+        var newOutputContainer = $('<div class="sql-output-container" id="' + containerId + '"></div>').css({
+            top: position.top,
+            left: position.left,
+            width: size.width,
+            height: size.height,
+            position: 'fixed'
+        });
+
+        var newOutputHandle = $('<div class="sql-output-handle"></div>');
+        var newOutputTitle = $('<div class="sql-output-title">' + title + '</div>');
+        var newOutputButtons = $('<div class="sql-output-buttons"><button class="minimize">-</button><button class="close">x</button></div>');
+
+        var newOutput = $('<textarea class="sql-output" name="sqlOutput"></textarea>').val(content);
+
+        newOutputHandle.append(newOutputTitle).append(newOutputButtons);
+        newOutputContainer.append(newOutputHandle).append(newOutput);
+        $('body').append(newOutputContainer);
+
+        enableClickToMove(newOutputContainer, newOutputHandle);
+        Prism.highlightAll();
+
+        if (minimized) {
+            newOutputContainer.addClass('minimized');
+        }
+
+        newOutputTitle.dblclick(function() {
+            $(this).attr('contenteditable', 'true').addClass('editable').focus();
+        }).blur(function() {
+            $(this).removeAttr('contenteditable').removeClass('editable');
+            savePostIts();
+        });
+
+        newOutputButtons.find('.minimize').click(function() {
+            newOutputContainer.toggleClass('minimized');
+            savePostIts();
+        });
+
+        newOutputButtons.find('.close').click(function() {
+            newOutputContainer.remove();
+            savePostIts();
+        });
+
+        newOutput.on('input', function() {
+            savePostIts();
+        });
+
+        newOutputContainer.on('resize', function() {
+            savePostIts();
+        });
+
+        newOutputContainer.on('dragstop', function() {
+            savePostIts();
+        });
+
+        savePostIts();
+    }
+
+    function savePostIts() {
+        const postIts = [];
+        $('.sql-output-container').each(function() {
+            const $this = $(this);
+            postIts.push({
+                id: $this.attr('id').split('-').pop(),
+                content: $this.find('.sql-output').val(),
+                title: $this.find('.sql-output-title').text(),
+                position: {
+                    top: $this.css('top'),
+                    left: $this.css('left')
+                },
+                size: {
+                    width: $this.css('width'),
+                    height: $this.css('height')
+                },
+                minimized: $this.hasClass('minimized')
+            });
+        });
+        localStorage.setItem('postIts', JSON.stringify(postIts));
+    }
+
+    function loadPostIts() {
+        const postIts = JSON.parse(localStorage.getItem('postIts')) || [];
+        postIts.forEach(postIt => {
+            createPostIt(postIt.content, postIt.title, postIt.id, postIt.position, postIt.size, postIt.minimized);
+        });
+    }
+
+    function enableClickToMove(container, handle) {
+        handle.on('mousedown', function(e) {
+            e.preventDefault();
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const startTop = parseInt(container.css('top'), 10);
+            const startLeft = parseInt(container.css('left'), 10);
+
+            function onMouseMove(e) {
+                e.preventDefault();
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                container.css({
+                    top: startTop + dy + "px",
+                    left: startLeft + dx + "px"
+                });
+            }
+
+            $(document).on('mousemove', onMouseMove).one('mouseup', function() {
+                $(document).off('mousemove', onMouseMove);
+                savePostIts();
+            });
+        });
+    }
+
+    function enableColumnResizing() {
+        const table = document.querySelector('#result-table table');
+        const cols = table.querySelectorAll('th');
+        
+        cols.forEach(col => {
+            const resizer = document.createElement('div');
+            resizer.classList.add('resize-handle');
+            col.appendChild(resizer);
+            
+            let startX, startWidth;
+
+            resizer.addEventListener('mousedown', function(e) {
+                startX = e.pageX;
+                startWidth = col.offsetWidth;
+
+                function onMouseMove(e) {
+                    const newWidth = startWidth + (e.pageX - startX);
+                    if (newWidth >= 150 && newWidth <= 300) { // Ensure the new width respects the minimum and maximum width
+                        col.style.width = newWidth + 'px';
+                    }
+                }
+
+                function onMouseUp() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+        });
+    }
+});

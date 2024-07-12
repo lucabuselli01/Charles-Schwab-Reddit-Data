@@ -1,0 +1,305 @@
+/* Existing styles... */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Banner styling */
+.banner {
+    background-color: lightblue; /* Light blue background for the banner */
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    min-height: 500px; /* Minimum height to ensure the banner is sufficiently large */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner h1 {
+    margin: 0;
+    color: #333;
+}
+
+/* Style for the main container */
+.subreddits {
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 20px; /* Space between each subreddit box */
+    padding: 20px;
+}
+
+/* Individual subreddit box */
+.subreddit {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center content vertically */
+    width: 250px; /* Fixed width for each subreddit box */
+    padding: 20px;
+    border: 1px solid #ccc; /* Border around each subreddit box */
+    background: #fff; /* Background color for each box */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    text-align: center; /* Center text horizontally */
+}
+
+/* Anchor styling to ensure images are centered within their frame */
+.subreddit a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px; /* Fixed width for images */
+    height: 100px; /* Fixed height for images */
+    margin-bottom: 10px;
+    overflow: hidden; /* Hide overflow */
+}
+
+/* Image styling */
+.subreddit img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto; /* Adjust width to auto */
+    height: auto; /* Adjust height to auto */
+    display: block;
+    margin: 0 auto; /* Center the image within the anchor */
+}
+
+.subreddit h2, .subreddit p {
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .subreddit {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+
+/* Main container styling */
+.main-container {
+    display: flex;
+    margin-top: 20px; /* Space above the main container */
+    margin-bottom: 20px; /* Space below the main container to separate it from the footer */
+}
+
+/* Vertical Navbar styling */
+.vertical-navbar {
+    width: 200px; /* Adjust width as needed */
+    background-color: #333; /* Dark gray background, adjust as needed */
+    padding: 10px;
+    height: auto; /* Adjust height as needed */
+    display: flex; /* Ensures the navbar is treated as a flex container */
+    align-items: center; /* Centers items vertically */
+    flex-direction: column; /* Stack items vertically */
+    overflow-y: auto; /* Allow vertical scrolling */
+}
+
+.vertical-navbar ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%; /* Ensure ul covers the full width of the navbar */
+}
+
+.vertical-navbar ul li {
+    margin: 10px 0; /* Space out links */
+    width: 100%; /* Full width links */
+}
+
+.vertical-navbar ul li a {
+    text-decoration: none;
+    color: white; /* White text for readability */
+    background-color: lightblue; /* Same as the banner color */
+    display: block; /* Makes the link fill the li */
+    text-align: center; /* Center text horizontally */
+    padding: 10px; /* Padding for aesthetics */
+    border-radius: 5px; /* Optional rounded corners */
+}
+
+.vertical-navbar ul li a:hover {
+    background-color: #1E90FF; /* Darker shade on hover for visual feedback */
+}
+
+/* Existing styles... */
+
+/* Cover styling */
+.cover {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Optional semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    align-items: center;
+}
+
+.cover img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Display frame styling */
+.display-frame {
+    position: relative;
+    flex: 1;
+    padding: 20px;
+    height: 480px; /* Fixed height for the display frame */
+    overflow: auto; /* Enable both horizontal and vertical scrolling */
+    border: 1px solid #ccc; /* Optional border for the display frame */
+    background-color: #f9f9f9; /* Optional background color for the display frame */
+}
+
+/* Footer styling */
+footer {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.footer-column h3 {
+    margin-top: 0;
+}
+
+.footer-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin: 5px 0;
+}
+
+.footer-column ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-column ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer-column .small-font {
+    font-size: 0.8em;
+    color: #bbb;
+}
+
+.resources-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.resources-images img {
+    width: calc(33.33% - 10px);
+    height: auto;
+    border-radius: 5px;
+}
+
+/* LucidChart and code block */
+
+.display-area {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap when the screen is small */
+    justify-content: space-around;
+    gap: 20px; /* Adds space between the elements */
+    background: #333; /* Dark gray background for the container */
+    padding: 10px; /* Padding around the frames within the area */
+}
+
+.lucidchart-erd, .code-display {
+    flex-basis: 48%; /* Each takes a little less than half of the container width */
+    height: 400px; /* Adjusted height */
+    background: #333; /* Dark gray background for each frame */
+    border: 1px solid #444; /* Slightly darker border for some depth */
+    box-sizing: border-box;
+    overflow: auto; /* Adds scrolling to the entire container if needed */
+}
+
+.code-display {
+    background-color: #f4f4f4; /* Light grey background for the code area */
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee; /* Light grey background for the header */
+    padding: 5px 10px;
+    position: sticky; /* Keeps the header visible at the top when scrolling */
+    top: 0; /* Stick to the top of the container */
+    z-index: 10; /* Ensures it stays above the scrolled content */
+}
+
+.language {
+    font-weight: bold;
+}
+
+pre, code {
+    margin: 0;
+    padding: 10px;
+    white-space: pre; /* Maintains formatting of the SQL code */
+    overflow: auto; /* Ensures all code is scrollable if too long */
+    height: calc(100% - 40px); /* Deduct the height of the header and padding */
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee; /* Light grey background for the header */
+    padding: 5px 10px;
+    position: sticky; /* Keeps the header visible at the top when scrolling */
+    top: 0; /* Stick to the top of the container */
+    z-index: 10; /* Ensures it stays above the scrolled content */
+}
+
+.copy-button {
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #ddd; /* Light grey for button */
+    border: none;
+    border-radius: 4px;
+}
+
+.copy-button:hover {
+    background-color: #ccc; /* Darker grey on hover */
+}
+
+
+
+

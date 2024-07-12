@@ -1,0 +1,217 @@
+/* Root Layout Styling */
+body {
+    display: flex;
+    flex-direction: column; /* Aligns children vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+    overflow-x: hidden;
+    overflow-x: hidden; /* Prevents horizontal overflow */
+    font-family: Arial, sans-serif;
+}
+
+/* Loading cursor style */
+.loading {
+    cursor: wait !important;
+}
+
+/* Navigation bar styling */
+nav {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+
+/* Main Content Area - Chat Interface */
+.chat-interface {
+    position: fixed; /* Fixed at the bottom */
+    bottom: 0;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust horizontal centering */
+    width: 70%; 
+    background-color: #f3f3f3;
+    padding: 10px;
+    box-shadow: 0 -1px 10px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chat-input, #query-input {
+    flex-grow: 1;
+    margin-right: 10px; /* Spacing between input and button */
+    padding: 8px; /* Sufficient padding for typing comfort */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none; /* Removes default border styles */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Cursor indicates it's clickable */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* New button and input styling */
+.hidden {
+    display: none;
+}
+
+/* Container for the draggable elements */
+.button-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Post-it styling */
+.sql-output-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    min-height: 0px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+    resize: both;
+    overflow: hidden; /* Change to hidden to avoid scrollbar issues */
+    z-index: 2000;
+}
+
+.sql-output-handle {
+    height: 28px; /* Increased height for the title area */
+    background-color: #ccc;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sql-output-title {
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    padding: 4px; /* Add this line for padding */
+    margin: auto; /* Center the title */
+}
+
+
+.sql-output-title.editable {
+    outline: 1px solid #000;
+}
+
+.sql-output-title.editable:focus {
+    outline: none;
+}
+
+.sql-output-buttons {
+    display: flex;
+}
+
+.sql-output-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    line-height: 1;
+    margin-left: 5px;
+}
+
+.sql-output {
+    width: 100%;
+    height: calc(100% - 28px); /* Adjusted height for the title area */
+    background-color: #f9f9f9;
+    border: none;
+    font-family: monospace;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    resize: none;
+}
+
+/* Minimized state */
+.sql-output-container.minimized {
+    height: 28px !important; /* Ensure container height is collapsed to the height of the title */
+    overflow: hidden; /* Ensure no scrollbars appear */
+}
+
+.sql-output-container.minimized .sql-output {
+    display: none;
+}
+
+
+/* Result Table Styling */
+#result-table {
+    margin-top: 70px; /* Ensures the table appears below the navbar */
+    overflow: auto;
+    width: 900px;
+    max-width: 2000px;
+    margin: 20px auto;
+    text-align: center;
+    max-height: 78vh; /* Prevents the table from being resized beyond the viewport */
+    min-height: 450px; /* Sets a minimum height for the table */
+}
+
+#result-table table {
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto; /* Ensures the columns are of equal width */
+
+}
+
+#result-table th, #result-table td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+    max-width: 150px; /* Set a maximum width for columns */
+    min-width: 150px; /* Set a minimum width for columns */
+}
+
+#result-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 100; /* Ensures the header stays on top */
+}
+
+.resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    cursor: col-resize;
+    background-color: #ccc;
+    z-index: 200; /* Ensures the handle stays on top of other elements */
+}
+
+
+
+
+
+

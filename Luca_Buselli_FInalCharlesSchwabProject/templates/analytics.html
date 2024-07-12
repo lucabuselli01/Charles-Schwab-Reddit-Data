@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js" data-manual></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Add Plotly.js -->
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/nlp2sql">NLP2SQL</a></li>
+            <li><a href="/analytics">Analytics</a></li>
+        </ul>
+    </nav>
+    <div class="banner">
+        <h1>Welcome to Our Reddit Display</h1>
+    </div>
+    <div class="container">
+        <h1>Script Runner</h1>
+        <button id="start-script-btn">Start Script</button>
+        <button id="stop-script-btn">Stop Script</button>
+        <pre id="output-container"></pre>
+    </div>
+    <div class="container">
+        <h1>Live Sentiment Graph</h1>
+        <div id="graph"></div>
+        <button id="start-stream-btn">Start Streaming Data</button>
+    </div>
+</body>
+</html>

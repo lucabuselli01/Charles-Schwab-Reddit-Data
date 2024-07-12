@@ -1,0 +1,83 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const socket = io();
+
+    // Handle script start and stop buttons
+    document.getElementById('start-script-btn').addEventListener('click', function() {
+        console.log("Start button clicked");
+        socket.emit('start_script');
+    });
+
+    document.getElementById('stop-script-btn').addEventListener('click', function() {
+        console.log("Stop button clicked");
+        socket.emit('stop_script');
+    });
+
+    socket.on('script_output', function(msg) {
+        const outputContainer = document.getElementById('output-container');
+        const message = msg.data;
+        outputContainer.innerHTML += message + '\n';
+        outputContainer.scrollTop = outputContainer.scrollHeight;  // Auto-scroll
+        console.log("Output received: ", message);
+    });
+
+    // Handle streaming data
+    const startStreamBtn = document.getElementById('start-stream-btn');
+    const graphDiv = document.getElementById('graph');
+
+    let xData = [];
+    let yData = [];
+    let latestData = null;  // Track the latest data to avoid duplicates
+    let isStreaming = false;  // Track streaming status
+
+    const layout = {
+        title: 'Live Sentiment Graph',
+        xaxis: {
+            title: 'Post Created Time',
+            type: 'date',
+            tickformat: '%H:%M:%S'  // Format to show hours, minutes, and seconds
+        },
+        yaxis: {
+            title: 'Sentiment',
+            range: [-1, 1],
+            zeroline: true,
+            zerolinewidth: 2,
+            zerolinecolor: '#969696'
+        }
+    };
+
+    Plotly.newPlot(graphDiv, [{ x: xData, y: yData, type: 'scatter', mode: 'lines+markers', name: 'Sentiment' }], layout);
+
+    startStreamBtn.addEventListener('click', function() {
+        if (!isStreaming) {
+            console.log("Start streaming button clicked");
+            socket.emit('start_stream');
+            isStreaming = true;  // Prevent multiple triggers
+        }
+    });
+
+    socket.on('initial_data', function(data) {
+        console.log("Initial data received", data);
+        xData = data.map(item => new Date(item.x));
+        yData = data.map(item => item.y);
+        latestData = data[data.length - 1];  // Set the latest data to the last item in the initial data
+        const startTime = new Date(xData[0]);
+        layout.xaxis.range = [startTime, new Date(startTime.getTime() + 60000)];  // Set the range to one minute ahead of the start time
+        Plotly.newPlot(graphDiv, [{ x: xData, y: yData, type: 'scatter', mode: 'lines+markers', name: 'Sentiment' }], layout);
+    });
+
+    socket.on('new_data', function(data) {
+        console.log("New data received", data);
+        // Check if the new data is a duplicate
+        if (latestData && latestData.x === data.x && latestData.y === data.y) {
+            return;  // Ignore duplicate data
+        }
+        latestData = data;  // Update the latest data
+
+        const newDate = new Date(data.x);
+        xData.push(newDate);
+        yData.push(data.y);
+        Plotly.extendTraces(graphDiv, { x: [xData], y: [yData] }, [0]);
+        layout.xaxis.range = [new Date(newDate.getTime() - 60000), newDate];  // Update the range to keep the latest minute of data
+        Plotly.relayout(graphDiv, layout);  // Update the layout
+    });
+});

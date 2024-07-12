@@ -1,0 +1,88 @@
+$(document).ready(function() {
+    var isRefreshing = false;
+
+    $('#cover img').on('error', function() {
+        alert('Failed to load cover image');
+    });
+    
+    // Initially show the cover when the page is ready
+    $('#cover').show();
+
+    // Handle clicking on table links
+    $('.table-link').click(function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        var tableName = $(this).data('table'); // Get the table name from the data attribute
+
+        // Fetch the table data and hide the cover when data is ready
+        fetchTableData(tableName, function() {
+            if (!isRefreshing) {
+                $('#cover').hide(); // Hide the cover when data is displayed
+            }
+        });
+
+        $('.table-link').removeClass('active'); // Optionally clear active states
+        $(this).addClass('active'); // Optionally set the clicked link as active
+        isRefreshing = false;
+    });
+
+    // Handle clicking on the refresh button
+    $('#refresh-button').click(function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        $('#display-frame').empty(); // Clear the display frame
+        $('.table-link').removeClass('active'); // Remove active class from all table links
+        $('#cover').show(); // Ensure the cover is shown again
+        isRefreshing = true;
+    });
+
+    // Function to fetch and display table data
+    function fetchTableData(tableName, callback) {
+        $.ajax({
+            url: '/get_table_data', // The URL for the AJAX request
+            type: 'GET', // HTTP method
+            data: { table: tableName }, // Data to be sent to the server
+            success: function(data) {
+                $('#display-frame').html(data); // Update the display frame with the table data
+                if (callback) callback(); // Call the callback to hide the cover if provided
+            },
+            error: function(err) {
+                console.error('Error fetching table data:', err); // Log any errors to the console
+                if (callback) callback(); // Call the callback to hide the cover in case of error
+            }
+        });
+    }
+});
+
+$(document).ready(function() {
+    $.get('/get-sql-code', function(data) {
+        $('#sql-code').text(data);
+        // If using Prism.js for syntax highlighting, uncomment the next line
+        // Prism.highlightAll();
+    }).fail(function() {
+        console.error('Failed to load SQL code');
+    });
+});
+
+
+function copyToClipboard() {
+    var codeContent = document.getElementById('sql-code').innerText;
+    navigator.clipboard.writeText(codeContent).then(function() {
+        alert('Code copied to clipboard!');
+    }, function(err) {
+        console.error('Could not copy text: ', err);
+    });
+}
+
+
+$(document).ready(function() {
+    $.get('/get-sql-code', function(data) {
+        $('#sql-code').text(data);
+        Prism.highlightAll();  // Activate Prism highlighting
+    }).fail(function() {
+        console.error('Failed to load SQL code');
+    });
+});
+
+
+
+
+

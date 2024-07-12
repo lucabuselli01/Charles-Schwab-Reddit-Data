@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NLP to SQL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nlp2sql.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/nlp2sql.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js" data-manual></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/nlp2sql">NLP2SQL</a></li>
+            <li><a href="/analytics">Analytics</a></li>
+        </ul>
+    </nav>
+
+    <!-- Content specific to NLP to SQL can go here -->
+    <!-- SQL Output Sidebar -->
+    <!-- Main Content Area -->
+ <!-- Main Content Area -->
+
+    <!-- Container for results -->
+    <!-- Container for results -->
+    <div id="result-table" class="center"></div>
+
+
+ <div id="output-container" style="position: relative; height: calc(100vh - 50px); overflow: auto;"></div>
+
+    <!-- Main Content Area -->
+    <div class="chat-interface" id="nlp2sql-container">
+        <textarea id="chat-input" placeholder="Write your request in natural language..."></textarea>
+        <button id="send-button">Generate SQL</button>
+    </div>
+
+    <div class="chat-interface hidden" id="query-container">
+        <textarea id="query-input" placeholder="Write your SQL query here..."></textarea>
+        <button id="query-button" style="background-color: #28a745;">Run Query</button>
+    </div>
+
+
+<!-- Container for results -->
+</body>
+</body>
+</html>
